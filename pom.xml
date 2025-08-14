@@ -3,14 +3,14 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.kmind</groupId>
   <artifactId>kmind-apm-java</artifactId>
-  <version>0.2.2</version>
+  <version>0.2.3</version>
   <packaging>jar</packaging>
   <name>kmind-apm-java</name>
 
   <properties>
     <java.version>17</java.version>
     <spring.boot.version>3.3.3</spring.boot.version>
-    <opentelemetry.version>1.41.0</opentelemetry.version>
+    <opentelemetry.version>1.52.0</opentelemetry.version>
     <logstash.encoder.version>7.4</logstash.encoder.version>
     <maven.compiler.source>17</maven.compiler.source>
     <maven.compiler.target>17</maven.compiler.target>
@@ -26,13 +26,13 @@
         <type>pom</type>
         <scope>import</scope>
       </dependency>
-      <dependency>
+      <!-- <dependency>
         <groupId>io.opentelemetry.instrumentation</groupId>
         <artifactId>opentelemetry-instrumentation-bom</artifactId>
         <version>2.6.0</version>
         <type>pom</type>
         <scope>import</scope>
-      </dependency>
+      </dependency> -->
     </dependencies>
   </dependencyManagement>
 
@@ -48,17 +48,17 @@
     <dependency>
       <groupId>io.opentelemetry</groupId>
       <artifactId>opentelemetry-api</artifactId>
-      <optional>true</optional>
+      <version>${opentelemetry.version}</version>
     </dependency>
     <dependency>
       <groupId>io.opentelemetry</groupId>
       <artifactId>opentelemetry-sdk</artifactId>
-      <optional>true</optional>
+      <version>${opentelemetry.version}</version>
     </dependency>
     <dependency>
       <groupId>io.opentelemetry</groupId>
       <artifactId>opentelemetry-exporter-otlp</artifactId>
-      <optional>true</optional>
+      <version>${opentelemetry.version}</version>
     </dependency>
 
     <!-- Logging JSON via Logback (stdout) -->
