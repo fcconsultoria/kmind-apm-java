@@ -2,8 +2,7 @@ name: Publish Java Package
 
 on:
   push:
-    tags:
-      - 'main' # publica quando criar tag ex: v1.0.0
+    branches: [ main ]
 
 jobs:
   publish:
