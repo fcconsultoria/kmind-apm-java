@@ -15,17 +15,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.core.Ordered;
 
 @AutoConfiguration
-@ConditionalOnWebApplication
 public class KmindApmAutoConfiguration {
 
     @Bean
-    @ConditionalOnMissingBean
     public OpenTelemetry openTelemetry() {
         return OpenTelemetryConfig.buildOpenTelemetry();
     }
 
     @Bean
-    @ConditionalOnMissingBean
     public Tracer tracer(OpenTelemetry otel) {
         return otel.getTracer("kmind-apm");
     }
