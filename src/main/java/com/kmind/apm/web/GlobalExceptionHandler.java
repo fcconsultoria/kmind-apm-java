@@ -1,5 +1,7 @@
 package com.kmind.apm.web;
 
+import com.kmind.apm.logging.StackTraceParser;
+import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -16,15 +18,24 @@ public class GlobalExceptionHandler {
     private static final Logger log = LoggerFactory.getLogger("kmind.error");
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<Map<String, Object>> handleAny(Exception ex) {
-        // Log JSON via Logback encoder; MDC inclui trace_id/span_id
-        log.error("unhandled exception type={} message={}", ex.getClass().getName(), ex.getMessage(), ex);
-
+    public ResponseEntity<Map<String, Object>> handleAny(Exception ex, HttpServletRequest request) {
+        // Cria o payload de resposta (mantendo seu formato atual)
         Map<String, Object> body = new HashMap<>();
         body.put("timestamp", Instant.now().toString());
         body.put("error", "Internal Server Error");
         body.put("message", ex.getMessage());
         body.put("status", 500);
+        body.put("path", request.getRequestURI());
+
+        // Log estruturado em JSON com stack trace formatado
+        log.error("Unhandled exception", Map.of(
+            "type", ex.getClass().getName(),
+            "message", ex.getMessage(),
+            "method", request.getMethod(),
+            "path", request.getRequestURI(),
+            "stack", StackTraceParser.parse(ex.getStackTrace())
+        ));
+
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body);
     }
 }
