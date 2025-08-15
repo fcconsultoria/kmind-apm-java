@@ -59,14 +59,15 @@ public class OpenTelemetryConfig {
             String clusterName,
             String containerName) {
         
-        logger.info("Configurando OpenTelemetry. Tracing habilitado? {}", enableTracing);
-        logger.info("OTLP Endpoint: {}", otlpEndpoint);
-        logger.info("Tenant ID: {}", tenantId);
-
+        
         if (!enableTracing) {
-            logger.warn("Tracing DESABILITADO via configuração");
+            System.out.println("Tracing DESABILITADO via configuração");
             return OpenTelemetry.noop();
         }
+
+        System.out.println("[FALLBACK LOG] Configurando OpenTelemetry. enableTracing={} path={} message={}");
+        System.out.println(otlpEndpoint);
+        System.out.println(tenantId);
 
         try {
             Resource resource = Resource.getDefault()
@@ -82,8 +83,9 @@ public class OpenTelemetryConfig {
                 .addHeader("X-Scope-OrgId", tenantId)
                 .setTimeout(java.time.Duration.ofSeconds(10))
                 .build();
-
-            logger.info("Configurando exportador para: {}", otlpEndpoint);
+            
+            System.out.println("Configurando exportador para: {}");
+            System.out.println(otlpEndpoint);
 
             SdkTracerProvider tracerProvider = SdkTracerProvider.builder()
                 .addSpanProcessor(BatchSpanProcessor.builder(spanExporter).build())
@@ -95,11 +97,12 @@ public class OpenTelemetryConfig {
                 .setPropagators(ContextPropagators.create(W3CTraceContextPropagator.getInstance()))
                 .build();
 
-            logger.info("OpenTelemetry configurado com sucesso");
+            System.out.println("OpenTelemetry configurado com sucesso");
             return sdk;
 
         } catch (Exception e) {
-            logger.error("Falha ao configurar OpenTelemetry", e);
+            System.out.println("Falha ao configurar OpenTelemetry");
+            System.out.println(e);
             return OpenTelemetry.noop();
         }
     }
