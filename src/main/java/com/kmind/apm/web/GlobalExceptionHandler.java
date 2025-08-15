@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import net.logstash.logback.marker.Markers;
 
 import java.time.Instant;
 import java.util.HashMap;
@@ -33,7 +34,8 @@ public class GlobalExceptionHandler {
         logData.put("error", ex.getMessage());
         logData.put("stack", StackTraceParser.parse(ex.getStackTrace()));
 
-        log.error("Unhandled request error", logData);
+        // Usa Markers para incluir os campos estruturados
+        log.error(Markers.appendEntries(logData), "Unhandled request error");
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body);
     }
