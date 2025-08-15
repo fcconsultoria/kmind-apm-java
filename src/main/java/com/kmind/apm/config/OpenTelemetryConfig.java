@@ -125,9 +125,12 @@ import io.opentelemetry.api.common.Attributes;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
 import io.opentelemetry.sdk.resources.Resource;
 import io.opentelemetry.sdk.trace.SdkTracerProvider;
+import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary; // Importe esta annotation
+
 
 @Configuration
 public class OpenTelemetryConfig {
@@ -141,9 +144,15 @@ public class OpenTelemetryConfig {
     @Value("${otel.container.name:unknown-container}")
     private String containerName;
 
+    @Value("${otel.tenant.id:default-tenant}")
+    private String tenantId;
+
+    @Value("${otel.endpoint:https://trace.kmind.com.br}")
+    private String otlpEndpoint;
+
     @Bean
-    public OpenTelemetry openTelemetry() {
-        
+    @Primary
+    public OpenTelemetry customOpenTelemetry() {
         System.out.println("[FALLBACK LOG] Define atributos customizados (cluster, container, etc.)");
         Resource resource = Resource.getDefault()
             .merge(Resource.create(
@@ -154,8 +163,16 @@ public class OpenTelemetryConfig {
                     .build()
             ));
 
+        // 2. Configura o exportador OTLP com o header X-Scope-OrgID
+        OtlpHttpSpanExporter spanExporter = OtlpHttpSpanExporter.builder()
+            .setEndpoint(otlpEndpoint)
+            .addHeader("X-Scope-OrgID", tenantId) // Header crítico para multi-tenancy
+            .setTimeout(java.time.Duration.ofSeconds(10))
+            .build();
+
         // 2. Configura o SDK do OpenTelemetry
         SdkTracerProvider tracerProvider = SdkTracerProvider.builder()
+            .addSpanProcessor(BatchSpanProcessor.builder(spanExporter).build())
             .setResource(resource)
             .build();
 
