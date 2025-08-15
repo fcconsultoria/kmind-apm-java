@@ -95,7 +95,7 @@ public class OpenTelemetryConfig {
             OpenTelemetrySdk sdk = OpenTelemetrySdk.builder()
                 .setTracerProvider(tracerProvider)
                 .setPropagators(ContextPropagators.create(W3CTraceContextPropagator.getInstance()))
-                .build();
+                .buildAndRegisterGlobal();
 
             System.out.println("OpenTelemetry configurado com sucesso");
             return sdk;
