@@ -13,11 +13,14 @@ import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Collections;
 
 @Configuration
 public class OpenTelemetryConfig {
+    private static final Logger logger = LoggerFactory.getLogger(OpenTelemetryConfig.class);
 
     @Value("${OTEL_ENABLE_TRACE:true}")
     private boolean enableTracing;
@@ -45,32 +48,49 @@ public class OpenTelemetryConfig {
             String clusterName,
             String containerName) {
         
+        logger.info("Configurando OpenTelemetry. Tracing habilitado? {}", enableTracing);
+        logger.info("OTLP Endpoint: {}", otlpEndpoint);
+        logger.info("Tenant ID: {}", tenantId);
+
         if (!enableTracing) {
+            logger.warn("Tracing DESABILITADO via configuração");
             return OpenTelemetry.noop();
         }
 
-        Resource resource = Resource.getDefault()
-            .merge(Resource.create(
-                Attributes.builder()
-                .put("service.name", serviceName)
-                .put("cluster", clusterName)
-                .put("container", containerName).build()
-            ));
+        try {
+            Resource resource = Resource.getDefault()
+                .merge(Resource.create(
+                    Attributes.builder()
+                    .put("service.name", serviceName)
+                    .put("k8s.cluster.name", clusterName)
+                    .put("container.name", containerName)
+                    .build()));
 
-        OtlpHttpSpanExporter spanExporter = OtlpHttpSpanExporter.builder()
-            .setEndpoint(otlpEndpoint)
-            .addHeader("X-Scope-OrgId", tenantId)
-            .build();
+            OtlpHttpSpanExporter spanExporter = OtlpHttpSpanExporter.builder()
+                .setEndpoint(otlpEndpoint)
+                .addHeader("X-Scope-OrgId", tenantId)
+                .setTimeout(java.time.Duration.ofSeconds(10))
+                .build();
 
-        SdkTracerProvider tracerProvider = SdkTracerProvider.builder()
-            .addSpanProcessor(BatchSpanProcessor.builder(spanExporter).build())
-            .setResource(resource)
-            .build();
+            logger.info("Configurando exportador para: {}", otlpEndpoint);
 
-        return OpenTelemetrySdk.builder()
-            .setTracerProvider(tracerProvider)
-            .setPropagators(ContextPropagators.create(W3CTraceContextPropagator.getInstance()))
-            .buildAndRegisterGlobal();
+            SdkTracerProvider tracerProvider = SdkTracerProvider.builder()
+                .addSpanProcessor(BatchSpanProcessor.builder(spanExporter).build())
+                .setResource(resource)
+                .build();
+
+            OpenTelemetrySdk sdk = OpenTelemetrySdk.builder()
+                .setTracerProvider(tracerProvider)
+                .setPropagators(ContextPropagators.create(W3CTraceContextPropagator.getInstance()))
+                .build();
+
+            logger.info("OpenTelemetry configurado com sucesso");
+            return sdk;
+
+        } catch (Exception e) {
+            logger.error("Falha ao configurar OpenTelemetry", e);
+            return OpenTelemetry.noop();
+        }
     }
 
     @Bean
