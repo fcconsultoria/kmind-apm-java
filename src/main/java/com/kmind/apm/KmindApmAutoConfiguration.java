@@ -9,6 +9,7 @@ import io.opentelemetry.api.OpenTelemetry;
 import io.opentelemetry.api.trace.Tracer;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -20,8 +21,16 @@ public class KmindApmAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
+    @ConditionalOnProperty(name = "OTEL_ENABLE_TRACE", havingValue = "true", matchIfMissing = true)
     public OpenTelemetry openTelemetry() {
-        return OpenTelemetryConfig.buildOpenTelemetry();
+        return OpenTelemetryConfig.buildOpenTelemetry(
+            true, // enableTracing
+            System.getenv().getOrDefault("OTEL_TENANT_ID", "unknown"),
+            System.getenv().getOrDefault("OTEL_EXPORTER_OTLP_ENDPOINT", "http://localhost:4318"),
+            System.getenv().getOrDefault("OTEL_SERVICE_NAME", "unknown-service"),
+            System.getenv().getOrDefault("OTEL_CLUSTER_NAME", "unknown-cluster"),
+            System.getenv().getOrDefault("OTEL_CONTAINER_NAME", "unknown-container")
+        );
     }
 
     @Bean
@@ -31,6 +40,7 @@ public class KmindApmAutoConfiguration {
     }
 
     @Bean
+    @ConditionalOnProperty(name = "OTEL_ENABLE_TRACE", havingValue = "true", matchIfMissing = true)
     public FilterRegistrationBean<MDCTracingFilter> mdcTracingFilter(OpenTelemetry otel) {
         FilterRegistrationBean<MDCTracingFilter> reg = new FilterRegistrationBean<>();
         reg.setFilter(new MDCTracingFilter(otel));
