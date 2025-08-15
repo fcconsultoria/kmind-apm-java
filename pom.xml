@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.kmind</groupId>
   <artifactId>kmind-apm-java</artifactId>
-  <version>0.3.19</version>
+  <version>0.3.20</version>
   <packaging>jar</packaging>
   <name>kmind-apm-java</name>
 
@@ -41,6 +41,12 @@
     <dependency>
       <groupId>io.opentelemetry.instrumentation</groupId>
       <artifactId>opentelemetry-spring-boot-starter</artifactId>
+      <exclusions>
+          <exclusion>
+              <groupId>io.opentelemetry</groupId>
+              <artifactId>opentelemetry-sdk</artifactId>
+          </exclusion>
+      </exclusions>
       <version>2.6.0</version>
     </dependency>
 
@@ -48,6 +54,12 @@
     <dependency>
         <groupId>io.opentelemetry</groupId>
         <artifactId>opentelemetry-sdk</artifactId>
+        <version>${opentelemetry.version}</version>
+    </dependency>
+
+    <dependency>
+        <groupId>io.opentelemetry</groupId>
+        <artifactId>opentelemetry-exporter-otlp</artifactId>
         <version>${opentelemetry.version}</version>
     </dependency>
 

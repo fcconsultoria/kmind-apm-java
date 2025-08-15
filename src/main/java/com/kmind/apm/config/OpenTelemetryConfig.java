@@ -154,7 +154,7 @@ public class OpenTelemetryConfig {
     @Bean
     @Primary
     public OpenTelemetry customOpenTelemetry() {
-        System.out.println("[FALLBACK LOG] Define atributos customizados (cluster, container, etc.)");
+        System.out.println("[KMIND APM] Configurando OpenTelemetry customizado");
         Resource resource = Resource.getDefault()
             .merge(Resource.create(
                 Attributes.builder()
@@ -177,6 +177,7 @@ public class OpenTelemetryConfig {
             .setResource(resource)
             .build();
 
+        System.out.println("[KMIND APM] OpenTelemetry configurado para: " + otlpEndpoint);
         // 3. Constrói e retorna a instância customizada
         return OpenTelemetrySdk.builder()
             .setTracerProvider(tracerProvider)
