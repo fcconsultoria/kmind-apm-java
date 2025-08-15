@@ -19,24 +19,24 @@ import org.springframework.core.Ordered;
 @ConditionalOnWebApplication
 public class KmindApmAutoConfiguration {
 
-    // @Bean
-    // @ConditionalOnMissingBean
-    // @ConditionalOnProperty(name = "OTEL_ENABLE_TRACE", havingValue = "true", matchIfMissing = true)
-    // public OpenTelemetry openTelemetry() {
-    //     System.out.println("[FALLBACK LOG] Iniciando configuração OpenTelemetry");
-    //     OpenTelemetry otel = OpenTelemetryConfig.buildOpenTelemetry(
-    //         true, // enableTracing
-    //         System.getenv().getOrDefault("OTEL_TENANT_ID", "unknown"),
-    //         System.getenv().getOrDefault("OTEL_EXPORTER_OTLP_ENDPOINT", "http://localhost:4318"),
-    //         System.getenv().getOrDefault("OTEL_SERVICE_NAME", "unknown-service"),
-    //         System.getenv().getOrDefault("OTEL_CLUSTER_NAME", "unknown-cluster"),
-    //         System.getenv().getOrDefault("OTEL_CONTAINER_NAME", "unknown-container")
-    //     );
+    @Bean
+    @ConditionalOnMissingBean
+    @ConditionalOnProperty(name = "OTEL_ENABLE_TRACE", havingValue = "true", matchIfMissing = true)
+    public OpenTelemetry openTelemetry() {
+        System.out.println("[FALLBACK LOG] Iniciando configuração OpenTelemetry");
+        OpenTelemetry otel = OpenTelemetryConfig.buildOpenTelemetry(
+            true, // enableTracing
+            System.getenv().getOrDefault("OTEL_TENANT_ID", "unknown"),
+            System.getenv().getOrDefault("OTEL_EXPORTER_OTLP_ENDPOINT", "http://localhost:4318"),
+            System.getenv().getOrDefault("OTEL_SERVICE_NAME", "unknown-service"),
+            System.getenv().getOrDefault("OTEL_CLUSTER_NAME", "unknown-cluster"),
+            System.getenv().getOrDefault("OTEL_CONTAINER_NAME", "unknown-container")
+        );
 
-    //     System.out.println("[FALLBACK LOG] Configuração OpenTelemetry concluída");
+        System.out.println("[FALLBACK LOG] Configuração OpenTelemetry concluída");
 
-    //     return otel;
-    // }
+        return otel;
+    }
 
     @Bean
     @ConditionalOnMissingBean
@@ -52,12 +52,6 @@ public class KmindApmAutoConfiguration {
         reg.setOrder(Ordered.HIGHEST_PRECEDENCE);
         return reg;
     }
-    // public FilterRegistrationBean<MDCTracingFilter> mdcTracingFilter(OpenTelemetry otel) {
-    //     FilterRegistrationBean<MDCTracingFilter> reg = new FilterRegistrationBean<>();
-    //     reg.setFilter(new MDCTracingFilter(otel));
-    //     reg.setOrder(Ordered.HIGHEST_PRECEDENCE);
-    //     return reg;
-    // }
 
     @Bean
     public FilterRegistrationBean<RequestLoggingFilter> requestLoggingFilter() {

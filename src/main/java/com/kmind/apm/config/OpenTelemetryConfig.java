@@ -1,4 +1,4 @@
-// package com.kmind.apm.config;
+package com.kmind.apm.config;
 
 // import io.opentelemetry.api.OpenTelemetry;
 // import io.opentelemetry.api.common.Attributes;
@@ -143,7 +143,7 @@ public class OpenTelemetryConfig {
 
     @Bean
     public OpenTelemetry openTelemetry() {
-        // 1. Define atributos customizados (cluster, container, etc.)
+        System.out.println("[FALLBACK LOG] Define atributos customizados (cluster, container, etc.)");
         Resource resource = Resource.getDefault()
             .merge(Resource.create(
                 Attributes.builder()
