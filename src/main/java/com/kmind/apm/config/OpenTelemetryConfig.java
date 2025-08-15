@@ -13,6 +13,7 @@ import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,6 +40,16 @@ public class OpenTelemetryConfig {
 
     @Value("${OTEL_CONTAINER_NAME:unknown-container}")
     private String containerName;
+
+    @PostConstruct
+    public void init() {
+        logger.info("===========================================");
+        logger.info("Configuração OpenTelemetry Iniciada");
+        logger.info("Tracing habilitado: {}", enableTracing);
+        logger.info("OTLP Endpoint: {}", otlpEndpoint);
+        logger.info("Service Name: {}", serviceName);
+        logger.info("===========================================");
+    }
 
     public static OpenTelemetry buildOpenTelemetry(
             boolean enableTracing,
