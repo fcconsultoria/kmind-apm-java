@@ -28,8 +28,6 @@
                     <throwableConverter class="net.logstash.logback.stacktrace.ShortenedThrowableConverter">
                         <maxDepthPerThrowable>30</maxDepthPerThrowable>
                         <shortenedClassNameLength>20</shortenedClassNameLength>
-                        <exclude>sun\.reflect\..*\.invoke.*</exclude>
-                        <exclude>net\.sf\.cglib\.proxy\.MethodProxy\.invoke</exclude>
                         <rootCauseFirst>true</rootCauseFirst>
                     </throwableConverter>
                 </stackTrace>
@@ -41,11 +39,21 @@
         </encoder>
     </appender>
 
-    <logger name="kmind" level="INFO" additivity="false">
+    <!-- Configuração específica para os loggers do Kmind -->
+    <logger name="kmind.error" level="ERROR" additivity="false">
+        <appender-ref ref="STDOUT"/>
+    </logger>
+    
+    <logger name="kmind.request" level="INFO" additivity="false">
+        <appender-ref ref="STDOUT"/>
+    </logger>
+    
+    <logger name="kmind.notfound" level="WARN" additivity="false">
         <appender-ref ref="STDOUT"/>
     </logger>
 
+    <!-- Configuração raiz para outros logs -->
     <root level="INFO">
-        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="CONSOLE"/>
     </root>
 </configuration>

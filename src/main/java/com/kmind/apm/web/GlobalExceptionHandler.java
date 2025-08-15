@@ -27,14 +27,13 @@ public class GlobalExceptionHandler {
         body.put("status", 500);
         body.put("path", request.getRequestURI());
 
-        // Log estruturado em JSON com stack trace formatado
-        log.error("Unhandled exception", Map.of(
-            "type", ex.getClass().getName(),
-            "message", ex.getMessage(),
-            "method", request.getMethod(),
-            "path", request.getRequestURI(),
-            "stack", StackTraceParser.parse(ex.getStackTrace())
-        ));
+        Map<String, Object> logData = new HashMap<>();
+        logData.put("method", request.getMethod());
+        logData.put("url", request.getRequestURL().toString());
+        logData.put("error", ex.getMessage());
+        logData.put("stack", StackTraceParser.parse(ex.getStackTrace()));
+
+        log.error("Unhandled request error", logData);
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body);
     }

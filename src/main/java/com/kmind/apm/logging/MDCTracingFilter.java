@@ -33,8 +33,8 @@ public class MDCTracingFilter extends OncePerRequestFilter {
             String traceId = ctx.isValid() ? ctx.getTraceId() : "";
             String spanId = ctx.isValid() ? ctx.getSpanId() : "";
 
-            MDC.put("trace_id", traceId);
-            MDC.put("span_id", spanId);
+            MDC.put("traceId", traceId);
+            MDC.put("spanId", spanId);
 
             if (!traceId.isEmpty()) {
                 response.setHeader("X-Trace-Id", traceId);
@@ -43,8 +43,8 @@ public class MDCTracingFilter extends OncePerRequestFilter {
 
             filterChain.doFilter(request, response);
         } finally {
-            MDC.remove("trace_id");
-            MDC.remove("span_id");
+            MDC.remove("traceId");
+            MDC.remove("spanId");
         }
     }
 }
