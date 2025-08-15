@@ -122,6 +122,7 @@ package com.kmind.apm.config;
 
 import io.opentelemetry.api.OpenTelemetry;
 import io.opentelemetry.api.common.Attributes;
+import io.opentelemetry.exporter.otlp.http.trace.OtlpHttpSpanExporter;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
 import io.opentelemetry.sdk.resources.Resource;
 import io.opentelemetry.sdk.trace.SdkTracerProvider;
@@ -129,7 +130,7 @@ import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary; // Importe esta annotation
+import org.springframework.context.annotation.Primary;
 
 
 @Configuration
