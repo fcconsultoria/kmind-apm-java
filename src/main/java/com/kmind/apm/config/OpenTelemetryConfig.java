@@ -10,7 +10,6 @@ import io.opentelemetry.sdk.resources.Resource;
 import io.opentelemetry.sdk.trace.SdkTracerProvider;
 import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;
 import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor;
-import io.opentelemetry.semconv.ResourceAttributes;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -51,11 +50,12 @@ public class OpenTelemetryConfig {
         }
 
         Resource resource = Resource.getDefault()
-            .merge(Resource.create(Attributes.of(
-                ResourceAttributes.SERVICE_NAME, serviceName,
-                ResourceAttributes.K8S_CLUSTER_NAME, clusterName,
-                ResourceAttributes.CONTAINER_NAME, containerName
-            )));
+            .merge(Resource.create(
+                Attributes.builder()
+                .put("service.name", serviceName)
+                .put("cluster", clusterName)
+                .put("container", containerName).build()
+            ));
 
         OtlpHttpSpanExporter spanExporter = OtlpHttpSpanExporter.builder()
             .setEndpoint(otlpEndpoint)
