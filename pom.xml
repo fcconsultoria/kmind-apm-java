@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.kmind</groupId>
   <artifactId>kmind-apm-java</artifactId>
-  <version>0.3.6</version>
+  <version>0.3.7</version>
   <packaging>jar</packaging>
   <name>kmind-apm-java</name>
 
@@ -63,6 +63,12 @@
       <groupId>net.logstash.logback</groupId>
       <artifactId>logstash-logback-encoder</artifactId>
       <version>${logstash.encoder.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>jakarta.annotation</groupId>
+      <artifactId>jakarta.annotation-api</artifactId>
+      <version>2.1.1</version>
     </dependency>
 
     <dependency>
