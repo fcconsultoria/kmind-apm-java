@@ -143,6 +143,10 @@ public class OpenTelemetryConfig {
 
     @Bean
     public OpenTelemetry openTelemetry() {
+        return buildOpenTelemetry();
+    }
+
+    public static OpenTelemetry buildOpenTelemetry(){
         System.out.println("[FALLBACK LOG] Define atributos customizados (cluster, container, etc.)");
         Resource resource = Resource.getDefault()
             .merge(Resource.create(
