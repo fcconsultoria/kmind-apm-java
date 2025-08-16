@@ -15,7 +15,8 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.Ordered;
 
-@AutoConfiguration(before=io.opentelemetry.instrumentation.spring.autoconfigure.OpenTelemetryAutoConfiguration.class)
+@AutoConfiguration
+// (before=io.opentelemetry.instrumentation.spring.autoconfigure.OpenTelemetryAutoConfiguration.class)
 @ConditionalOnWebApplication
 public class KmindApmAutoConfiguration {
 
