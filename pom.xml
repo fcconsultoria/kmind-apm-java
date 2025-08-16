@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.kmind</groupId>
   <artifactId>kmind-apm-java</artifactId>
-  <version>0.3.23</version>
+  <version>0.3.24</version>
   <packaging>jar</packaging>
   <name>kmind-apm-java</name>
 
@@ -41,12 +41,6 @@
     <dependency>
       <groupId>io.opentelemetry.instrumentation</groupId>
       <artifactId>opentelemetry-spring-boot-starter</artifactId>
-      <exclusions>
-          <exclusion>
-              <groupId>io.opentelemetry.instrumentation</groupId>
-              <artifactId>opentelemetry-spring-boot-autoconfigure</artifactId>
-          </exclusion>
-      </exclusions>
       <version>2.6.0</version>
     </dependency>
 
