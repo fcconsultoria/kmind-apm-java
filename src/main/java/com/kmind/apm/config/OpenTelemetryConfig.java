@@ -131,29 +131,18 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.core.env.Environment;
 
 
-@Configuration
 public class OpenTelemetryConfig {
 
-    @Value("${otel.service.name:unknown-service}")
-    private String serviceName;
+    public static OpenTelemetry build(Environment env) {
+        String otlpEndpoint = env.getProperty("otel.endpoint", "https://trace.kmind.com.br");
+        String serviceName = env.getProperty("otel.service.name", "default-service");
+        String clusterName = env.getProperty("otel.cluster.name", "default-cluster");
+        String containerName = env.getProperty("otel.container.name", "default-container");
+        String tenantId = env.getProperty("otel.tenant.id", "default-tenant");
 
-    @Value("${otel.cluster.name:unknown-cluster}")
-    private String clusterName;
-
-    @Value("${otel.container.name:unknown-container}")
-    private String containerName;
-
-    @Value("${otel.tenant.id:default-tenant}")
-    private String tenantId;
-
-    @Value("${otel.endpoint:https://trace.kmind.com.br}")
-    private String otlpEndpoint;
-
-    @Bean
-    @Primary
-    public OpenTelemetry customOpenTelemetry() {
         System.out.println("[KMIND APM] Configurando OpenTelemetry customizado");
         Resource resource = Resource.getDefault()
             .merge(Resource.create(
