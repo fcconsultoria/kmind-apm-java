@@ -16,11 +16,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.core.Ordered;
 import org.springframework.core.env.Environment;
 // import io.opentelemetry.instrumentation.spring.autoconfigure.OpenTelemetryAutoConfiguration;
-import org.springframework.context.annotation.PropertySource;
+// import org.springframework.context.annotation.PropertySource;
 
 @AutoConfiguration
 @ConditionalOnWebApplication
-@PropertySource("classpath:kmind-apm.properties")
+// @PropertySource("classpath:kmind-apm.properties")
 public class KmindApmAutoConfiguration {
 
     // @Bean
