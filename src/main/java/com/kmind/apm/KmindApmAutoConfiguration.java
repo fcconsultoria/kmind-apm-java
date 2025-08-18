@@ -20,7 +20,7 @@ import org.springframework.context.annotation.PropertySource;
 
 @AutoConfiguration
 @ConditionalOnWebApplication
-@PropertySource("classpath:application.properties")
+@PropertySource("classpath:kmind-apm.properties")
 public class KmindApmAutoConfiguration {
 
     // @Bean

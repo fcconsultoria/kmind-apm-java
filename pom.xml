@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.kmind</groupId>
   <artifactId>kmind-apm-java</artifactId>
-  <version>0.3.28</version>
+  <version>0.3.29</version>
   <packaging>jar</packaging>
   <name>kmind-apm-java</name>
 
