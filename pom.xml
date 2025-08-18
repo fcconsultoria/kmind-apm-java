@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.kmind</groupId>
   <artifactId>kmind-apm-java</artifactId>
-  <version>0.3.27</version>
+  <version>0.3.28</version>
   <packaging>jar</packaging>
   <name>kmind-apm-java</name>
 
@@ -19,14 +19,6 @@
 
   <dependencyManagement>
     <dependencies>
-      <dependency>
-          <groupId>io.opentelemetry.instrumentation</groupId>
-          <artifactId>opentelemetry-instrumentation-bom</artifactId>
-          <version>2.6.0</version>
-          <type>pom</type>
-          <scope>import</scope>
-      </dependency>
-      
       <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-dependencies</artifactId>
