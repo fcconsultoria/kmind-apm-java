@@ -17,14 +17,14 @@ import org.springframework.core.Ordered;
 import org.springframework.core.env.Environment;
 import io.opentelemetry.instrumentation.spring.autoconfigure.OpenTelemetryAutoConfiguration;
 
-@AutoConfiguration(before = OpenTelemetryAutoConfiguration.class)
+// @AutoConfiguration(before = OpenTelemetryAutoConfiguration.class)
 @ConditionalOnWebApplication
 public class KmindApmAutoConfiguration {
 
-    @Bean
-    public OpenTelemetry openTelemetry(Environment env) {
-        return OpenTelemetryConfig.build(env);
-    }
+    // @Bean
+    // public OpenTelemetry openTelemetry(Environment env) {
+    //     return OpenTelemetryConfig.build(env);
+    // }
 
     // @Bean
     // @ConditionalOnMissingBean
