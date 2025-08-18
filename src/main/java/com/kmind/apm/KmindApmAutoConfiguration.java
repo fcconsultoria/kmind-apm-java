@@ -1,6 +1,6 @@
 package com.kmind.apm;
 
-import com.kmind.apm.config.OpenTelemetryConfig;
+// import com.kmind.apm.config.OpenTelemetryConfig;
 import com.kmind.apm.logging.MDCTracingFilter;
 import com.kmind.apm.middleware.RequestLoggingFilter;
 import com.kmind.apm.middleware.NotFoundHandler;
@@ -17,7 +17,7 @@ import org.springframework.core.Ordered;
 import org.springframework.core.env.Environment;
 import io.opentelemetry.instrumentation.spring.autoconfigure.OpenTelemetryAutoConfiguration;
 
-// @AutoConfiguration(before = OpenTelemetryAutoConfiguration.class)
+@AutoConfiguration
 @ConditionalOnWebApplication
 public class KmindApmAutoConfiguration {
 
